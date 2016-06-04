@@ -1,0 +1,55 @@
+.ToolbarButton {
+  z-index: 1;
+  min-width: 40px;
+  overflow: visible;
+  position: relative;
+  height: 23px;
+  border: none;
+  background: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 0 10px;
+  font-size: 12px;
+  padding-bottom: 1px;
+
+  &:after {
+    border-radius: 4px;
+    z-index: -1;
+    background-image: linear-gradient(#FCFCFC, #F1F1F1);
+    box-shadow: 0 1px 0 #FDFDFD inset;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+    &:before {
+    border-radius: 5px;
+    z-index: -1;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -0.5px;
+    bottom: -0.5px;
+    left: -1px;
+  }
+
+  &:active {
+    &:after {
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+      background-image: linear-gradient(#E5E5E5, #DCDCDC);
+    }
+  }
+
+  .icon + .label {
+    margin-left: 5px;
+  }
+
+  .icon {
+    color: #737373;
+    position: relative;
+    top: 1px
+  }
+}

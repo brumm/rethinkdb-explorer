@@ -1,5 +1,4 @@
 .Titlebar {
-  height: 38px;
   padding: 0 10px;
   background-color: #fafafa;
   background-image: linear-gradient(top,
@@ -10,6 +9,30 @@
   );
   border-bottom: 1px solid #afafaf;
   font-size: 13px;
+  position: relative;
+}
+
+.hidden {
+  height: 23px;
+}
+
+.hidden-inset {
+  height: 38px;
+  .Toolbar {
+    top: 0px;
+    left: 70px;
+  }
+}
+
+.full {
+  height: 55px;
+  .title {
+    height: 23px;
+    bottom: initial;
+  }
+  .Toolbar {
+    top: 23px;
+  }
 }
 
 .TitlebarUnfocused {
@@ -20,4 +43,27 @@
     #f6f6f6 100%
   );
   border-bottom-color: #d1d1d1;
+
+  .title {
+    color: #d3d3d3;
+  }
+}
+
+.title {
+  position: absolute;
+  top: 0; right: 0;
+  bottom: 0; left: 0;
+  font-size: 13px;
+  color: #4d4d4d;
+}
+
+.Toolbar {
+  overflow: visible;
+  padding: 0 10px 8px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
 }

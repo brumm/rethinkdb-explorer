@@ -1,0 +1,43 @@
+
+.AutoSizerContainer > div {
+  flex-grow: 1;
+}
+
+.Header {
+  padding: 0 10px;
+  & + & {
+    border-left: 1px solid #D8D8D8;
+  }
+}
+
+.Row {
+  font-size: 12px;
+}
+
+.HeaderRow {
+  composes: Row;
+  background-color: #F0F0F0;
+  border-bottom: 1px solid #D8D8D8;
+}
+
+.EvenRow {
+  composes: Row;
+  background-color: #FAFAFA;
+}
+
+.OddRow {
+  composes: Row;
+  background-color: #F5F5F5;
+}
+
+.Cell {
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+.HeaderCell {
+  composes: Cell;
+  height: 17px;
+  font-weight: normal;
+  text-transform: lowercase;
+}

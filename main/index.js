@@ -3,11 +3,18 @@ import {
   app,
   BrowserWindow,
   Menu,
-  screen,
   ipcMain
 } from 'electron'
-import template from './menu-template.js'
 import windowStateKeeper from 'electron-window-state'
+import {
+  connect,
+  dbList,
+  db,
+  table,
+  tableList,
+} from 'rethinkdb'
+
+import template from './menu-template.js'
 
 const { DEV, PORT = '8080' } = process.env
 const windowUrl = DEV
@@ -17,10 +24,9 @@ const windowUrl = DEV
 let mainWindow
 
 function createWindow () {
-  let { width, height } = screen.getPrimaryDisplay().workAreaSize
   let mainWindowState = windowStateKeeper({
-    defaultWidth: width * 0.9,
-    defaultHeight: height * 0.9
+    defaultWidth: 1000,
+    defaultHeight: 600
   });
 
   mainWindow = new BrowserWindow({
@@ -29,7 +35,7 @@ function createWindow () {
     x: mainWindowState.x,
     y: mainWindowState.y,
     minWidth: 1000,
-    minHeight: 700,
+    minHeight: 600,
     titleBarStyle: 'hidden-inset',
     webPreferences: {
       webSecurity: false
@@ -39,16 +45,48 @@ function createWindow () {
 
   mainWindowState.manage(mainWindow)
   mainWindow.loadURL(windowUrl)
-  if (DEV) {
-    mainWindow.webContents.openDevTools()
-  }
-  mainWindow.on('closed', () => {
-    mainWindow = null
+
+  ipcMain.on('show-window', () => {
+    mainWindow.show()
+    if (DEV) mainWindow.webContents.openDevTools()
   })
 
-  mainWindow.webContents.on('did-finish-load', () => mainWindow.show())
   mainWindow.on('blur', () => mainWindow.webContents.send('window-blur'))
   mainWindow.on('focus', () => mainWindow.webContents.send('window-focus'))
+  mainWindow.on('closed', () => mainWindow = null)
+
+  function on(methodName, callback) {
+    methodName = `rpc-${methodName}`
+    ipcMain.on(methodName, (event, ...args) => {
+      console.info('[on]', methodName, ...args);
+      const send = data => event.sender.send(methodName, data)
+      callback(send, ...args)
+    })
+  }
+
+  connect((error, connection) => {
+
+    if (error) {
+    } else {
+
+      on('database-list', send => (
+        dbList().run(connection).then(send)
+      ))
+
+      on('table-list', (send, databaseName) => (
+          db(databaseName).tableList().run(connection).then(send)
+      ))
+
+      on('row-list', (send, databaseName, tableName) => (
+          db(databaseName)
+          .table(tableName)
+          .run(connection)
+          .then(cursor => cursor.toArray())
+          .then(send)
+      ))
+
+    }
+  })
 }
 
 app.on('ready', createWindow)

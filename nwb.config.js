@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const package = require('./package.json');
-const ComponentResolverPlugin = require('component-resolver-webpack');
+const DirectoryNameAsMain = require('webpack-directory-name-as-main');
 
 const cssConfig = {
   query: {
@@ -20,11 +20,11 @@ module.exports = {
         root: [path.resolve('./src')],
         extensions: ["", ".webpack.js", ".web.js", ".js", ".scss"]
       },
-      plugins: [
-        new webpack.ResolverPlugin([
-          new ComponentResolverPlugin()
-        ])
-      ],
+      // plugins: [
+      //   new webpack.ResolverPlugin([
+      //     new DirectoryNameAsMain()
+      //   ])
+      // ],
       output: {
         publicPath: ''
       }
